@@ -1,17 +1,30 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 const ModalContext = createContext();
 
 export const useModals = () => useContext(ModalContext);
 
 export const ModalProvider = ({ children }) => {
-   const [isOpen, setIsOpen] = useState(false);
+   // On utilise un objet pour gérer l'état ouvert/fermé de plusieurs modales
+   const [modals, setModals] = useState({});
 
-   const openModal = () => setIsOpen(true);
-   const closeModal = () => setIsOpen(false);
+   const openModal = (id) => setModals({ ...modals, [id]: true });
+   const closeModal = (id) => setModals({ ...modals, [id]: false });
+
+   // Gère la fermeture de toutes les modales avec la touche Esc
+   useEffect(() => {
+      const handleEsc = (event) => {
+         if (event.keyCode === 27) setModals({});
+      };
+      window.addEventListener("keydown", handleEsc);
+
+      return () => {
+         window.removeEventListener("keydown", handleEsc);
+      };
+   }, []);
 
    return (
-      <ModalContext.Provider value={{ isOpen, openModal, closeModal }}>
+      <ModalContext.Provider value={{ modals, openModal, closeModal }}>
          {children}
       </ModalContext.Provider>
    );

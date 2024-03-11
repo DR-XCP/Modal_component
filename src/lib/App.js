@@ -2,19 +2,20 @@ import React from "react";
 import { ModalProvider, useModals } from "../lib/contexts/ModalContext";
 import Modal from "./Modal";
 
-const ModalToggle = () => {
-   const { isOpen, openModal } = useModals();
-   // Le bouton est maintenant conditionné par l'état isOpen.
-   if (isOpen) return null; // Ne pas afficher le bouton si la modal est ouverte.
+const ModalToggle = ({ id }) => {
+   const { modals, openModal } = useModals();
+   if (modals[id]) return null;
 
-   return <button onClick={openModal}>Ouvrir Modal</button>;
+   return <button onClick={() => openModal(id)}>Ouvrir Modal {id}</button>;
 };
 
 const App = () => {
    return (
       <ModalProvider>
-         <ModalToggle />
-         <Modal contentSrc={"Contenu de la modal"} />
+         <ModalToggle id="modal1" />
+         <Modal id="modal1" contentSrc={"Contenu de la première modal"} />
+         <ModalToggle id="modal2" />
+         <Modal id="modal2" contentSrc={"Contenu de la deuxième modal"} />
       </ModalProvider>
    );
 };
