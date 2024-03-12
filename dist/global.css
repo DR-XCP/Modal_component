@@ -1,17 +1,3 @@
-body {
-   margin: 0;
-   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
-      "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
-      "Helvetica Neue", sans-serif;
-   -webkit-font-smoothing: antialiased;
-   -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-      monospace;
-}
-
 .modal {
    display: block;
    top: 0;
@@ -31,6 +17,10 @@ code {
 .modal:last-of-type {
    top: 20%;
    right: 10%;
+}
+
+.modalClose {
+   display: none;
 }
 
 .modal-content {

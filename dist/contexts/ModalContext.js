@@ -9,25 +9,28 @@ var _react = _interopRequireWildcard(require("react"));
 const ModalContext = /*#__PURE__*/(0, _react.createContext)();
 const useModals = () => (0, _react.useContext)(ModalContext);
 exports.useModals = useModals;
+const generateId = () => "modal_".concat(new Date().getTime(), "_").concat(Math.random().toString(36).substring(2, 9));
 const ModalProvider = _ref => {
   let {
     children
   } = _ref;
   // On utilise un objet pour gérer l'état ouvert/fermé de plusieurs modales
   const [modals, setModals] = (0, _react.useState)({});
-  const openModal = id => setModals({
-    ...modals,
-    [id]: true
-  });
+  const openModal = function () {
+    let id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : generateId();
+    setModals({
+      ...modals,
+      [id]: true
+    });
+    return id;
+  };
   const closeModal = id => setModals({
     ...modals,
     [id]: false
   });
-
-  // Gère la fermeture de toutes les modales avec la touche Esc
   (0, _react.useEffect)(() => {
     const handleEsc = event => {
-      if (event.keyCode === 27) setModals({});
+      if (event.keyCode === "Escape") setModals({});
     };
     window.addEventListener("keydown", handleEsc);
     return () => {
