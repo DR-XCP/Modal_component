@@ -1,18 +1,49 @@
 import React from "react";
 import Modal from "./Modal";
-import { useModals } from "./contexts/ModalContext";
+import { ModalProvider, useModals } from "./contexts/ModalContext";
 
 const App = () => {
-   const { openModal } = useModals();
-
-   const handleClick = () => {
-      openModal("modal");
-   };
+   const { openModal, closeModal, modals } = useModals();
+   const modalId = "";
 
    return (
       <>
-         <button onClick={handleClick}>Ouvrir</button>
-         <Modal id="modal" contentSrc={"Contenu de la modal"} />
+         <ModalProvider>
+            <div>
+               <button
+                  id="openModal"
+                  type="button"
+                  className="open-btn"
+                  onClick={() => openModal(modalId)}
+                  aria-label="Ouvrir la modale pour plus d'informations"
+               >
+                  Ouvrir Modal
+               </button>
+               <form
+                  onSubmit={(e) => {
+                     e.preventDefault();
+                     openModal(modalId);
+                  }}
+               >
+                  <button
+                     id="submitButton"
+                     className="submitButton"
+                     type="submit"
+                     aria-label="Soumettre la modale pour la valider"
+                  >
+                     Envoyer
+                  </button>
+               </form>
+               {modals[modalId] && (
+                  <Modal
+                     id={modalId}
+                     contentSrc="Contenu de la modal"
+                     isOpen={modals[modalId]}
+                     onClose={() => closeModal(modalId)}
+                  />
+               )}
+            </div>
+         </ModalProvider>
       </>
    );
 };

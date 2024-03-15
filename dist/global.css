@@ -24,16 +24,18 @@
 }
 
 .modal-content {
+   position: relative;
    background: white;
    padding: 20px;
    border-radius: 4px;
-   max-width: 500px;
+   max-width: 300px;
    width: 90%;
    z-index: 1001;
    border: 1px solid black;
+   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.6);
 }
 
-button {
+.open-btn {
    margin: 10px;
    cursor: pointer;
    padding: 10px 20px;
@@ -41,4 +43,17 @@ button {
    border: none;
    border-radius: 5px;
    color: white;
+}
+
+.close-btn {
+   position: absolute;
+   right: -5px;
+   top: -13px;
+   background-color: transparent;
+   border: none;
+   cursor: pointer;
+   height: 21px;
+   width: 21px;
+   color: black;
+   font-size: 20px;
 }

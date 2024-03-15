@@ -1,30 +1,76 @@
-import React, { useEffect, useState } from "react";
-import { useModals } from "./contexts/ModalContext";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import React, { useEffect, useRef, useState } from "react";
 
-const Modal = ({ id, contentSrc }) => {
-   const { modals, closeModal } = useModals();
+const Modal = ({ id, contentSrc, isOpen, onClose }) => {
    const [content, setContent] = useState("");
-   // Détermine la classe CSS de la modale en fonction de si elle est ouverte ou non
-   const style = modals[id] ? "modal" : "modalClose";
+   const [loading, setLoading] = useState(false);
+   const [error, setError] = useState(null);
+   const modalRef = useRef(null);
 
-   // Màj le contenu quand elle est ouverte ou quand le contenu change
    useEffect(() => {
-      if (modals[id]) {
-         if (contentSrc) {
-            setContent(contentSrc);
-         } else {
-            setContent("Aucun contenu...");
-         }
-      }
-   }, [modals, id, contentSrc]);
+      // Si modal fermée, ne charge pas le contenu
+      if (!isOpen) return;
 
-   if (!modals[id]) return null;
+      if (contentSrc.startsWith("http")) {
+         setLoading(true);
+         setError(null);
+
+         fetch(contentSrc)
+            .then((response) => {
+               if (!response.ok) throw new Error("Network response was not ok");
+               return response.text();
+            })
+            .then((data) => {
+               setContent(data);
+               setLoading(false);
+            })
+            .catch((error) => {
+               console.error("Error loading modal content:", error);
+               setError(error.toString());
+               setLoading(false);
+            });
+      } else {
+         setContent(contentSrc);
+      }
+      // Gestion du focus quand la modale est ouverte
+      if (isOpen && modalRef.current) {
+         modalRef.current.focus();
+      }
+   }, [isOpen, contentSrc]);
+
+   // Utilise la prop isOpen pour déterminer la classe CSS
+   const style = isOpen ? "modal" : "modalClose";
 
    return (
-      <div className={style} id={id}>
-         <div className="modal-content">
-            <div>{content}</div>
-            <button onClick={() => closeModal(id)}>Fermer</button>
+      <div
+         className={style}
+         id={id}
+         role="dialog"
+         aria-modal="true"
+         tabIndex="-1"
+         ref={modalRef}
+         onKeyDown={(e) => {
+            if (e.key === "Escape") {
+               onClose();
+            }
+         }}
+      >
+         <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            {loading ? (
+               <p>Chargement...</p>
+            ) : error ? (
+               <p>Erreur de chargement: {error}</p>
+            ) : (
+               <div dangerouslySetInnerHTML={{ __html: content }}></div>
+            )}
+            <button
+               type="button"
+               className="close-btn"
+               onClick={onClose}
+               aria-label="Fermer"
+            >
+               <i className="bi bi-x"></i>
+            </button>
          </div>
       </div>
    );
