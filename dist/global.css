@@ -35,7 +35,8 @@
    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.6);
 }
 
-.open-btn {
+.open-btn,
+.submitButton {
    margin: 10px;
    cursor: pointer;
    padding: 10px 20px;
@@ -47,13 +48,18 @@
 
 .close-btn {
    position: absolute;
-   right: -5px;
-   top: -13px;
+   right: 8px;
+   top: -1px;
    background-color: transparent;
    border: none;
    cursor: pointer;
    height: 21px;
    width: 21px;
-   color: black;
-   font-size: 20px;
+   color: red;
+}
+
+.bi-x {
+   font-size: 1.3rem;
+   text-shadow: 1px 0 0 currentColor, 0 1px 0 currentColor,
+      -1px 0 0 currentColor, 0 -1px 0 currentColor;
 }

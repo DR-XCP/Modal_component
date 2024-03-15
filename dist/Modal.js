@@ -17,8 +17,9 @@ const Modal = _ref => {
   const [content, setContent] = (0, _react.useState)("");
   const [loading, setLoading] = (0, _react.useState)(false);
   const [error, setError] = (0, _react.useState)(null);
+  const modalRef = (0, _react.useRef)(null);
   (0, _react.useEffect)(() => {
-    // S'assure que la modale ne tente de charger le contenu que si elle est ouverte
+    // Si modal fermée, ne charge pas le contenu
     if (!isOpen) return;
     if (contentSrc.startsWith("http")) {
       setLoading(true);
@@ -37,16 +38,26 @@ const Modal = _ref => {
     } else {
       setContent(contentSrc);
     }
-  }, [isOpen, contentSrc]); // Ajoute isOpen aux dépendances pour recharger le contenu si la modale est réouverte
+    // Gestion du focus quand la modale est ouverte
+    if (isOpen && modalRef.current) {
+      modalRef.current.focus();
+    }
+  }, [isOpen, contentSrc]);
 
-  // Utilise la prop isOpen pour déterminer la classe CSS, affectant ainsi l'affichage de la modale
+  // Utilise la prop isOpen pour déterminer la classe CSS
   const style = isOpen ? "modal" : "modalClose";
-
-  // Si isOpen est false, ne rend rien
-  if (!isOpen) return null;
   return /*#__PURE__*/_react.default.createElement("div", {
     className: style,
-    id: id
+    id: id,
+    role: "dialog",
+    "aria-modal": "true",
+    tabIndex: "-1",
+    ref: modalRef,
+    onKeyDown: e => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    }
   }, /*#__PURE__*/_react.default.createElement("div", {
     className: "modal-content",
     onClick: e => e.stopPropagation()
@@ -57,9 +68,10 @@ const Modal = _ref => {
   }), /*#__PURE__*/_react.default.createElement("button", {
     type: "button",
     className: "close-btn",
-    onClick: onClose // Remplace closeModal(id) par onClose
+    onClick: onClose,
+    "aria-label": "Fermer"
   }, /*#__PURE__*/_react.default.createElement("i", {
-    className: "bi bi-x-circle-fill"
+    className: "bi bi-x"
   }))));
 };
 var _default = exports.default = Modal;
