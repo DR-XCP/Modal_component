@@ -1,70 +1,147 @@
-# Getting Started with Create React App
+# react-modal-fromdr
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Description:
 
-## Available Scripts
+The react-modal-fromdr plugin provides a complete and flexible solution for integrating modal windows into your React applications.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+-  Display of dynamic content in modals.
+-  Full customization of the modal's style.
+-  Management of opening and closing with animation and focus.
+-  Easy integration into any React project through context and hooks.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## How to install :
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Use the command :
 
-### `npm test`
+##### npm
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+npm i react-modal-fromdr
+```
 
-### `npm run build`
+or
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+##### yarn
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+yarn add react-modal-fromdr
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Important Imports :
 
-### `npm run eject`
+**Before you start using** react-modal-fromdr in your project, make sure to import the main component and any required styles as follows:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+In the file **wrapping** the **App**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```JavaScript
+import { ModalProvider } from "react-modal-fromdr/dist/contexts/ModalContext";
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+In the component where the **modal** is **used**
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```JavaScript
+import Modal from "react-modal-fromdr/dist/Modal";
+import { useModals } from "react-modal-fromdr/dist/contexts/ModalContext";
+import "react-modal-fromdr/dist/global.css";
+```
 
-## Learn More
+## Usage Example :
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+To use this component in your React project, follow these steps:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. **Wrap your application with 'ModalProvider'** to make the modal context accessible throughout the application.
+2. **Use the 'ModalContext'** to access the **openModal** and **closeModal** functions, allowing you to open and close modals wherever you are in the component tree.
+3. **Open modals** by passing the desired content and a unique identifier to the '**openModal**' function.
 
-### Code Splitting
+```JavaScript
+import { useState } from "react";
+import Modal from "react-modal-fromdr/dist/Modal";
+import { useModals } from "react-modal-fromdr/dist/contexts/ModalContext";
+import "react-modal-fromdr/dist/global.css";
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+export function App() {
+   const { openModal, closeModal } = useModals();
+   const [modalContent, setModalContent] = useState("");
+   const [isModalOpen, setIsModalOpen] = useState(false);
 
-### Analyzing the Bundle Size
+   const handleSubmit = (e) => {
+      e.preventDefault();
+      const message = "Welcome in!";
+      setModalContent(message);
+      openModal("simpleModal");
+      setIsModalOpen(true);
+   };
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+   return (
+      <div className="mainContainer">
+         <h1>My Form</h1>
+         <form className="formContainer" onSubmit={handleSubmit}>
+            <div>
+               <label htmlFor="username">Username</label>
+               <input type="text" />
+            </div>
+            <div>
+               <label htmlFor="password">Password</label>
+               <input type="text" />
+            </div>
+            <button className="button" type="submit">
+               Submit
+            </button>
+         </form>
+         <div className="modalContainer">
+            <Modal
+               id="simpleModal"
+               isOpen={isModalOpen}
+               onClose={() => {
+                  closeModal("simpleModal");
+                  setIsModalOpen(false);
+               }}
+               contentSrc={modalContent}
+               styles={{
+                  // Color and opacity of the modal's backdrop
+                  backdrop: {
+                     backgroundColor: "rgba(0,0,0,0.5)",
+                  },
+                  // Modal stylization
+                  modal: {
+                     width: "150px",
+                     height: "40px",
+                     borderRadius: "8px",
+                  },
+                  // Close button positioning within the modal
+                  closeButton: {
+                     top: "10px",
+                  },
+                  // General position of the modal within the viewport
+                  container: {
+                     top: "-150px",
+                  },
+                  // Icon color inside the close button
+                  icon: {
+                     color: "blue",
+                  },
+               }}
+            />
+         </div>
+      </div>
+   );
+}
+```
 
-### Making a Progressive Web App
+## Props :
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+The following props are available for the `Modal`
 
-### Advanced Configuration
+|      Props | Description                                                         |
+| ---------: | ------------------------------------------------------------------- |
+|         id | Identifier for the modal element                                    |
+| contentSrc | URL to load the modal's content if it needs to be fetched           |
+|     isOpen | Boolean to control the modal's visibility                           |
+|    onClose | Function called when the modal is requested to close                |
+|     styles | Object containing style overrides for the modal, its backdrop, etc. |
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Licence
 
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Ce projet est sous licence MIT. Voir le fichier [LICENSE](src/lib/LICENSE.txt) pour plus de détails.
