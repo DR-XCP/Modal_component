@@ -12,12 +12,68 @@ const Modal = _ref => {
     id,
     contentSrc,
     isOpen,
-    onClose
+    onClose,
+    backgroundColor = "white",
+    fontColor = "black",
+    backdropColor = "rgba(0, 0, 0, 0.5)",
+    width = "300px",
+    height = "80px",
+    padding = "20px",
+    borderRadius = "4px",
+    border = "1px solid black",
+    boxShadow = "0 4px 8px 0 rgba(0, 0, 0, 0.6)",
+    closeIconColor = "red",
+    closeIconSize = "1.3rem",
+    closeIconPosition = {
+      top: "-18px",
+      right: "-8px"
+    }
   } = _ref;
   const [content, setContent] = (0, _react.useState)("");
   const [loading, setLoading] = (0, _react.useState)(false);
   const [error, setError] = (0, _react.useState)(null);
   const modalRef = (0, _react.useRef)(null);
+
+  // Style de la modal
+  const modalStyle = {
+    backgroundColor,
+    color: fontColor,
+    width,
+    height,
+    padding,
+    borderRadius,
+    border,
+    boxShadow
+  };
+
+  // Ajout d'un fond lorsque la modal est ouverte
+  const backdropStyle = {
+    display: isOpen ? "block" : "none",
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    backgroundColor: backdropColor,
+    zIndex: 1000
+  };
+
+  // Style du bouton close
+  const closeBtnStyle = {
+    backgroundColor: "transparent",
+    border: "none",
+    cursor: "pointer",
+    width: "21px",
+    color: closeIconColor,
+    top: closeIconPosition.top,
+    right: closeIconPosition.right
+  };
+
+  // Style de l'icone du bouton close
+  const iconStyle = {
+    fontSize: closeIconSize,
+    textShadow: "1px 0 0 currentColor, 0 1px 0 currentColor, -1px 0 0 currentColor, 0 -1px 0 currentColor"
+  };
   (0, _react.useEffect)(() => {
     // Si modal fermée, ne charge pas le contenu
     if (!isOpen) return;
@@ -47,12 +103,15 @@ const Modal = _ref => {
   // Utilise la prop isOpen pour déterminer la classe CSS
   const style = isOpen ? "modal" : "modalClose";
   return /*#__PURE__*/_react.default.createElement("div", {
+    style: backdropStyle
+  }, /*#__PURE__*/_react.default.createElement("div", {
     className: style,
     id: id,
     role: "dialog",
     "aria-modal": "true",
     tabIndex: "-1",
     ref: modalRef,
+    style: modalStyle,
     onKeyDown: e => {
       if (e.key === "Escape") {
         onClose();
@@ -67,11 +126,13 @@ const Modal = _ref => {
     }
   }), /*#__PURE__*/_react.default.createElement("button", {
     type: "button",
+    style: closeBtnStyle,
     className: "close-btn",
     onClick: onClose,
     "aria-label": "Fermer"
   }, /*#__PURE__*/_react.default.createElement("i", {
-    className: "bi bi-x"
-  }))));
+    className: "bi bi-x",
+    style: iconStyle
+  })))));
 };
 var _default = exports.default = Modal;
