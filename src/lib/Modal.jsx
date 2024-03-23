@@ -11,8 +11,8 @@ const Modal = ({ id, contentSrc, isOpen, onClose, styles = {} }) => {
    const defaultModalStyle = {
       backgroundColor: "white",
       color: "black",
-      width: "300px",
-      height: "80px",
+      width: "auto",
+      height: "auto",
       padding: "20px",
       borderRadius: "4px",
       border: "1px solid black",
@@ -34,13 +34,11 @@ const Modal = ({ id, contentSrc, isOpen, onClose, styles = {} }) => {
 
    const modalContainerStyle = {
       display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
       position: "fixed",
       top: 0,
       left: 0,
-      width: "100%",
-      height: "100%",
+      width: "auto",
+      height: "auto",
       ...styles.container,
    };
 

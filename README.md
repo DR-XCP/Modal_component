@@ -116,7 +116,9 @@ export function App() {
                   },
                   // General position of the modal within the viewport
                   container: {
-                     top: "-150px",
+                     top: "50%",
+                     left: "50%",
+                     transform: "translate(-50%, -50%)",
                   },
                   // Icon color inside the close button
                   icon: {

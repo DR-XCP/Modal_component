@@ -35,7 +35,25 @@ const App = () => {
     id: modalId,
     contentSrc: "Contenu de la modal",
     isOpen: modals[modalId],
-    onClose: () => closeModal(modalId)
+    onClose: () => closeModal(modalId),
+    styles: {
+      // Color and opacity of the modal's backdrop
+      backdrop: {},
+      // Modal stylization
+      modal: {
+        width: "250px"
+      },
+      // Close button positioning within the modal
+      closeButton: {},
+      // General position of the modal within the viewport
+      container: {
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)"
+      },
+      // Icon color inside the close button
+      icon: {}
+    }
   }))));
 };
 var _default = exports.default = App;
