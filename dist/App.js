@@ -1,11 +1,12 @@
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault").default;
+var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard").default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
 var _Modal = _interopRequireDefault(require("./Modal"));
 var _ModalContext = require("./contexts/ModalContext");
 const App = () => {
@@ -14,28 +15,26 @@ const App = () => {
     closeModal,
     modals
   } = (0, _ModalContext.useModals)();
-  const modalId = "";
+  const [currentModalId, setCurrentModalId] = (0, _react.useState)(null);
+  const handleOpenModal = () => {
+    const newModalId = openModal();
+    setCurrentModalId(newModalId);
+  };
+  const handleCloseModal = () => {
+    closeModal(currentModalId);
+    setCurrentModalId(null);
+  };
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_ModalContext.ModalProvider, null, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("button", {
     id: "openModal",
     type: "button",
     className: "open-btn",
-    onClick: () => openModal(modalId),
+    onClick: handleOpenModal,
     "aria-label": "Ouvrir la modale pour plus d'informations"
-  }, "Ouvrir Modal"), /*#__PURE__*/_react.default.createElement("form", {
-    onSubmit: e => {
-      e.preventDefault();
-      openModal(modalId);
-    }
-  }, /*#__PURE__*/_react.default.createElement("button", {
-    id: "submitButton",
-    className: "submitButton",
-    type: "submit",
-    "aria-label": "Soumettre la modale pour la valider"
-  }, "Envoyer")), modals[modalId] && /*#__PURE__*/_react.default.createElement(_Modal.default, {
-    id: modalId,
+  }, "Ouvrir Modal"), currentModalId && modals[currentModalId] && /*#__PURE__*/_react.default.createElement(_Modal.default, {
+    id: currentModalId,
     contentSrc: "Contenu de la modal",
-    isOpen: modals[modalId],
-    onClose: () => closeModal(modalId),
+    isOpen: modals[currentModalId],
+    onClose: handleCloseModal,
     styles: {
       // Color and opacity of the modal's backdrop
       backdrop: {},
